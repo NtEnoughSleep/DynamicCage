@@ -1,0 +1,6 @@
+name: DynamicCage
+version: '0.0.2'
+main: ir.Awake.DynamicCage
+api-version: '1.21'
+description: "A plugin that creates a moving cage"
+author: Awake
