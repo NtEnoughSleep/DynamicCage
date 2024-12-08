@@ -1,9 +1,10 @@
 cageMaterial: RED_STAINED_GLASS
-cageSize: 4
+cageSize: 3
 # The larger the number, the better the performance,
 # but it should be smaller than the size.
-movementToMoveCage: 3
+movementToMoveCage: 2
 # More efficient if true
 skipEdges: true
 
 logCageCreation: true
+max-players: 10

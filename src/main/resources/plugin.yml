@@ -5,6 +5,19 @@ api-version: '1.21'
 description: "A plugin that creates a moving cage"
 author: Awake
 commands:
+    DynamicCage:
+      description: Dynamic Cage
+      usage: /cage [add|removePlayer|list|reload]
+      subcommands:
+        add:
+          description: add player to cage list
+          usage: /<command> <player>
+        remove:
+          description: remove player from cage list
+          usage: /<command> <player>
+        list:
+          description: get in cage players list
+          usage: /<command>
     CageMaterial:
       description: Sets the material for the cage
       usage: /<command> <material>

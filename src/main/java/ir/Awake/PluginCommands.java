@@ -27,6 +27,47 @@ public class PluginCommands {
     private void sendSuccess(CommandSender sender){
         sender.sendMessage(ChatColor.GREEN + "Successfully changed. ");
     }
+    public boolean MainCommand(CommandSender sender, Command cmd, String label, String[] args){
+        if (args.length == 0 || args[0].equals("help")) {
+            sender.sendMessage(ChatColor.YELLOW + "Available Commands:");
+            sender.sendMessage(ChatColor.GREEN + "/DynamicCage add <playerName> " + ChatColor.WHITE + "- Adds a player to the cage list.");
+            sender.sendMessage(ChatColor.GREEN + "/DynamicCage remove <playerName> " + ChatColor.WHITE + "- Removes a player from the cage list.");
+            sender.sendMessage(ChatColor.GREEN + "/DynamicCage list " + ChatColor.WHITE + "- Lists all players with cages.");
+            return true;
+        }
+        String subCommand = args[0].toLowerCase();
+        switch (subCommand) {
+            case "add":
+                if (args.length != 2) {
+                    sender.sendMessage(ChatColor.RED + "incorrect usage. ");
+                    return false;
+                }
+                var isAdded = dynamicCage.addToCage(args[1]);
+                if (!isAdded)
+                    sender.sendMessage(ChatColor.RED + "player is exist in list or max players reached. ");
+                else
+                    sendSuccess(sender);
+                break;
+            case "remove":
+                break;
+            case "list":
+                break;
+            default:
+                sender.sendMessage(ChatColor.RED + "invalid subcommand. ");
+                return false;
+        }
+        return true;
+    }
+    public List<String> mainCommandTab(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 1) {
+            return List.of("add", "remove", "list", "reload");
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("add")) {
+            return dynamicCage.getServer().getOnlinePlayers().stream().map(Player::getName).toList();
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {
+            Collections.emptyList(); // متدی که لیست بازیکنان درون قفس را برمی‌گرداند
+        }
+        return Collections.emptyList();
+    }
     public boolean setCageMaterial(CommandSender sender, Command cmd, String label, String[] args){
         if (!basicChecks(sender, args)) return false;
         Material material = Material.getMaterial(args[0].toUpperCase());

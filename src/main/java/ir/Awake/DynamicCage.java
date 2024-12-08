@@ -1,12 +1,14 @@
 package ir.Awake;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.Map;
 
 public final class DynamicCage extends JavaPlugin {
 
@@ -16,12 +18,14 @@ public final class DynamicCage extends JavaPlugin {
     private int cageSize;
     private boolean skipEdges;
     private boolean isCreationLogEnable;
-
+    private int maxPlayers;
+    private Map<String, Map<BlockKey, Location>> inCagePlayers = new HashMap<>();
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
         loadConfig();
         PluginCommands pl = new PluginCommands(this);
+        registerCommand("DynamicCage", pl::MainCommand, pl::mainCommandTab);
         registerCommand("CageMaterial", pl::setCageMaterial, pl::setCageMaterialTab);
         registerCommand("MinPlayerMove", pl::setMinPlayerMove, (sender, command, alias, args) -> Collections.emptyList());
         registerCommand("CageSize", pl::setCageSize, (sender, command, alias, args) -> Collections.emptyList());
@@ -46,6 +50,12 @@ public final class DynamicCage extends JavaPlugin {
         if (isCreationLogEnable){
             log(log);
         }
+    }
+    public boolean addToCage(String username){
+        if (inCagePlayers.size() > maxPlayers) return false;
+        if (inCagePlayers.containsKey(username)) return false;
+        inCagePlayers.put(username, new HashMap<>());
+        return true;
     }
     public void setCageMaterial(Material cageMaterial) {
         this.cageMaterial = cageMaterial;
@@ -87,7 +97,8 @@ public final class DynamicCage extends JavaPlugin {
         movementToMoveCage = getConfig().getInt("movementToMoveCage", 2);
         cageSize = getConfig().getInt("cageSize", 3);
         skipEdges = getConfig().getBoolean("skipEdges", true);
-
+        isCreationLogEnable = getConfig().getBoolean("logCageCreation", true);
+        maxPlayers = getConfig().getInt("max-players", 5);
         log("Cage Material: " + cageMaterial);
         log("Movement to Move Cage: " + movementToMoveCage );
         log("Cage Size: " + cageSize);
