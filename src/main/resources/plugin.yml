@@ -4,3 +4,24 @@ main: ir.Awake.DynamicCage
 api-version: '1.21'
 description: "A plugin that creates a moving cage"
 author: Awake
+commands:
+    CageMaterial:
+      description: Sets the material for the cage
+      usage: /<command> <material>
+      tab-completion: true
+    MinPlayerMove:
+      description: Sets the movementToMoveCage in config
+      usage: /<command> <Integer value>
+      tab-completion: false
+    CageSize:
+      description: Sets the cageSize in config
+      usage: /<command> <Integer value>
+      tab-completion: false
+    SkipEdges:
+      description: skip edges of cube, will optimize process.
+      usage: /<command> <value>
+      tab-completion: true
+    logEnable:
+      description: disable or enable log
+      usage: /<command> <value>
+      tab-completion: true
