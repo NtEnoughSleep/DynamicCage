@@ -44,6 +44,10 @@ public class PluginCommands {
                     sender.sendMessage(ChatColor.RED + "incorrect usage. ");
                     return false;
                 }
+                if (sender.hasPermission("dynamiccage.uncageable")){
+                    sender.sendMessage(ChatColor.RED + "You cannot add this player to the list. ");
+                    return true;
+                }
                 var isAdded = dynamicCage.addToCage(args[1]);
                 if (!isAdded)
                     sender.sendMessage(ChatColor.RED + "player is exist in list or max players reached. ");
@@ -62,6 +66,8 @@ public class PluginCommands {
                 sender.sendMessage(ChatColor.GREEN + String.join(", ", dynamicCage.getInCagePlayers()));
                 break;
             case "clear":
+                dynamicCage.clearCage();
+                sendSuccess(sender);
                 break;
             default:
                 sender.sendMessage(ChatColor.RED + "invalid subcommand. ");

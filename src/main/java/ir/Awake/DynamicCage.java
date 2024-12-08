@@ -10,14 +10,14 @@ import java.util.*;
 
 public final class DynamicCage extends JavaPlugin {
 
-
     private Material cageMaterial;
     private int movementToMoveCage;
     private int cageSize;
     private boolean skipEdges;
     private boolean isCreationLogEnable;
     private int maxPlayers;
-    private Map<String, Map<BlockKey, Location>> inCagePlayers = new HashMap<>();
+    public Map<String, Map<BlockKey, Location>> inCagePlayers = new HashMap<>();
+    public CageHandler cageHandler;
 
     @Override
     public void onEnable() {
@@ -31,21 +31,25 @@ public final class DynamicCage extends JavaPlugin {
         registerCommand("SkipEdges", pl::setSkipEdges, (sender, command, alias, args) -> List.of("true", "false"));
         registerCommand("logEnable", pl::setLogEnable, (sender, command, alias, args) -> List.of("true", "false"));
         log("DynamicCage is now Available");
+        cageHandler = new CageHandler(this);
+        getServer().getPluginManager().registerEvents(cageHandler, this);
     }
 
     @Override
     public void onDisable() {
         saveConfig();
+        log("Disabling Plugin ...");
+        clearCage();
         log("Plugin has been disabled! See you next time.");
     }
     private void registerCommand(String commandName, CommandExecutor executor, TabCompleter tabCompleter) {
         getCommand(commandName).setExecutor(executor);
         getCommand(commandName).setTabCompleter(tabCompleter);
     }
-    private void log(String log){
+    public void log(String log){
         getLogger().info(log);
     }
-    private void log(String log, Boolean canBeDisabled){
+    public void log(String log, Boolean canBeDisabled){
         if (isCreationLogEnable){
             log(log);
         }
@@ -57,11 +61,34 @@ public final class DynamicCage extends JavaPlugin {
         return true;
     }
     public void removeFromCage(String username){
-        inCagePlayers.remove(username);
+        if (inCagePlayers != null) {
+            cageHandler.removePlayerCage(username);
+            inCagePlayers.remove(username);
+        }
+    }
+    public void clearCage(){
+        for (String username: inCagePlayers.keySet())
+            cageHandler.removePlayerCage(username);
+        inCagePlayers.clear();
     }
     public Set<String> getInCagePlayers() {
         return inCagePlayers.keySet();
     }
+    public int getCageSize(){
+        return cageSize;
+    }
+    public int getMovementToMoveCage() {
+        return movementToMoveCage;
+    }
+
+    public Material getCageMaterial() {
+        return cageMaterial;
+    }
+
+    public boolean isSkipEdges() {
+        return skipEdges;
+    }
+
     public void setCageMaterial(Material cageMaterial) {
         this.cageMaterial = cageMaterial;
         getConfig().set("cageMaterial", cageMaterial.toString());
@@ -96,6 +123,7 @@ public final class DynamicCage extends JavaPlugin {
         log("create cage log: " + creationLogEnable);
         saveConfig();
     }
+
     public void loadConfig() {
         this.reloadConfig();
         cageMaterial = Material.getMaterial(getConfig().getString("cageMaterial", "RED_STAINED_GLASS"));

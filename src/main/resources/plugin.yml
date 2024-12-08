@@ -1,5 +1,5 @@
 name: DynamicCage
-version: '0.0.2'
+version: '0.0.3'
 main: ir.Awake.DynamicCage
 api-version: '1.21'
 description: "A plugin that creates a moving cage"
@@ -38,3 +38,10 @@ commands:
       description: disable or enable log
       usage: /<command> <value>
       tab-completion: true
+permissions:
+  dynamiccage.bypass:
+    description: "If someone has it, it will be ignored in the move event"
+    default: false
+  dynamiccage.uncageable:
+    description: "If someone has it, you cannot add it to the list"
+    default: false
