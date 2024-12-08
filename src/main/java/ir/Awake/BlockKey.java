@@ -6,17 +6,6 @@ public class BlockKey {
     private final int x;
     private final int y;
     private final int z;
-    public double getX() {
-        return (double) x;
-    }
-
-    public double getY() {
-        return (double) y;
-    }
-
-    public double getZ() {
-        return (double) z;
-    }
 
     public BlockKey(int x, int y, int z) {
         this.x = x;
