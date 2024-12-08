@@ -1,5 +1,6 @@
 package ir.Awake;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -34,17 +35,23 @@ public class PluginCommands {
             sender.sendMessage(ChatColor.GREEN + "/DynamicCage add <playerName> " + ChatColor.WHITE + "- Adds a player to the cage list.");
             sender.sendMessage(ChatColor.GREEN + "/DynamicCage remove <playerName> " + ChatColor.WHITE + "- Removes a player from the cage list.");
             sender.sendMessage(ChatColor.GREEN + "/DynamicCage list " + ChatColor.WHITE + "- Lists all players with cages.");
+            sender.sendMessage(ChatColor.GREEN + "/DynamicCage clear " + ChatColor.WHITE + "- clears the list");
             return true;
         }
         String subCommand = args[0].toLowerCase();
 
         switch (subCommand) {
             case "add":
+                if (!sender.hasPermission("dynamiccage.list.add")){
+                    sender.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
+                    return true;
+                }
                 if (args.length != 2) {
                     sender.sendMessage(ChatColor.RED + "incorrect usage. ");
                     return false;
                 }
-                if (sender.hasPermission("dynamiccage.uncageable")){
+                var affectedPlayer = Bukkit.getPlayer(args[1]);
+                if ( affectedPlayer != null && affectedPlayer.hasPermission("dynamiccage.uncageable")){
                     sender.sendMessage(ChatColor.RED + "You cannot add this player to the list. ");
                     return true;
                 }
@@ -55,6 +62,10 @@ public class PluginCommands {
                     sendSuccess(sender);
                 break;
             case "remove":
+                if (!sender.hasPermission("dynamiccage.list.remove")){
+                    sender.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
+                    return true;
+                }
                 if (args.length != 2) {
                     sender.sendMessage(ChatColor.RED + "incorrect usage. ");
                     return false;
@@ -63,9 +74,17 @@ public class PluginCommands {
                 sendSuccess(sender);
                 break;
             case "list":
+                if (!sender.hasPermission("dynamiccage.list.get")){
+                    sender.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
+                    return true;
+                }
                 sender.sendMessage(ChatColor.GREEN + String.join(", ", dynamicCage.getInCagePlayers()));
                 break;
             case "clear":
+                if (!sender.hasPermission("dynamiccage.list.clear")){
+                    sender.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
+                    return true;
+                }
                 dynamicCage.clearCage();
                 sendSuccess(sender);
                 break;
@@ -77,7 +96,7 @@ public class PluginCommands {
     }
     public List<String> mainCommandTab(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return List.of("add", "remove", "list", "clear");
+            return List.of("add", "remove", "list", "clear", "help");
         } else if (args.length == 2 && args[0].equalsIgnoreCase("add")) {
             return dynamicCage.getServer().getOnlinePlayers().stream().map(Player::getName).toList();
         } else if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {

@@ -7,7 +7,10 @@ author: Awake
 commands:
     DynamicCage:
       description: Dynamic Cage
-      usage: /cage [add|remove|list|clear]
+      usage: /cage [add|remove|list|clear|help]
+      permission:
+        dynamiccage
+      permission-message: You do not have permission to use this command!
       subcommands:
         add:
           description: add player to cage list
@@ -18,30 +21,60 @@ commands:
         list:
           description: get in cage players list
           usage: /<command>
+        clear:
+          description: clear cage list
+          usage: /<command>
     CageMaterial:
       description: Sets the material for the cage
       usage: /<command> <material>
       tab-completion: true
+      permission:
+        dynamiccage.cagematerial
+      permission-message: You do not have permission to use this command!
     MinPlayerMove:
       description: Sets the movementToMoveCage in config
       usage: /<command> <Integer value>
       tab-completion: false
+      permission:
+        dynamiccage.minplayermove
+      permission-message: You do not have permission to use this command!
     CageSize:
       description: Sets the cageSize in config
       usage: /<command> <Integer value>
       tab-completion: false
+      permission:
+        dynamiccage.cagesize
+      permission-message: You do not have permission to use this command!
     SkipEdges:
       description: skip edges of cube, will optimize process.
       usage: /<command> <value>
       tab-completion: true
+      permission:
+        dynamiccage.skipedges
+      permission-message: You do not have permission to use this command!
     logEnable:
       description: disable or enable log
       usage: /<command> <value>
       tab-completion: true
+      permission:
+        dynamiccage.logenable
+      permission-message: You do not have permission to use this command!
 permissions:
   dynamiccage.bypass:
     description: "If someone has it, it will be ignored in the move event"
     default: false
   dynamiccage.uncageable:
     description: "If someone has it, you cannot add it to the list"
+    default: false
+  dynamiccage.list.add:
+    description: "Allow player to add someone to cagelist"
+    default: false
+  dynamiccage.list.remove:
+    description: "Allow player to remove someone to cagelist"
+    default: false
+  dynamiccage.list.get:
+    description: "Allow player to someone to get cagelist"
+    default: false
+  dynamiccage.list.clear:
+    description: "Allow player to clear cagelist"
     default: false
