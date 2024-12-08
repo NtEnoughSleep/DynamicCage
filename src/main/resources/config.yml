@@ -1,0 +1,10 @@
+cageSettings:
+  material: RED_STAINED_GLASS
+  size: 3
+  # The larger the number, the better the performance,
+  # but it should be smaller than the size.
+  movementToMoveCage: 2
+  # More efficient if true
+  skipEdges: true
+
+logCageCreation: true
