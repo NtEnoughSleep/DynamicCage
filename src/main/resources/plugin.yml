@@ -7,7 +7,7 @@ author: Awake
 commands:
     DynamicCage:
       description: Dynamic Cage
-      usage: /cage [add|removePlayer|list|reload]
+      usage: /cage [add|remove|list|clear]
       subcommands:
         add:
           description: add player to cage list

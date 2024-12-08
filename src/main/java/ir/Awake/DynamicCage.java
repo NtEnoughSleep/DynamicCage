@@ -5,10 +5,8 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 public final class DynamicCage extends JavaPlugin {
 
@@ -20,6 +18,7 @@ public final class DynamicCage extends JavaPlugin {
     private boolean isCreationLogEnable;
     private int maxPlayers;
     private Map<String, Map<BlockKey, Location>> inCagePlayers = new HashMap<>();
+
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
@@ -56,6 +55,12 @@ public final class DynamicCage extends JavaPlugin {
         if (inCagePlayers.containsKey(username)) return false;
         inCagePlayers.put(username, new HashMap<>());
         return true;
+    }
+    public void removeFromCage(String username){
+        inCagePlayers.remove(username);
+    }
+    public Set<String> getInCagePlayers() {
+        return inCagePlayers.keySet();
     }
     public void setCageMaterial(Material cageMaterial) {
         this.cageMaterial = cageMaterial;

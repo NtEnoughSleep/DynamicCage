@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +37,7 @@ public class PluginCommands {
             return true;
         }
         String subCommand = args[0].toLowerCase();
+
         switch (subCommand) {
             case "add":
                 if (args.length != 2) {
@@ -49,8 +51,17 @@ public class PluginCommands {
                     sendSuccess(sender);
                 break;
             case "remove":
+                if (args.length != 2) {
+                    sender.sendMessage(ChatColor.RED + "incorrect usage. ");
+                    return false;
+                }
+                dynamicCage.removeFromCage(args[1]);
+                sendSuccess(sender);
                 break;
             case "list":
+                sender.sendMessage(ChatColor.GREEN + String.join(", ", dynamicCage.getInCagePlayers()));
+                break;
+            case "clear":
                 break;
             default:
                 sender.sendMessage(ChatColor.RED + "invalid subcommand. ");
@@ -60,11 +71,11 @@ public class PluginCommands {
     }
     public List<String> mainCommandTab(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return List.of("add", "remove", "list", "reload");
+            return List.of("add", "remove", "list", "clear");
         } else if (args.length == 2 && args[0].equalsIgnoreCase("add")) {
             return dynamicCage.getServer().getOnlinePlayers().stream().map(Player::getName).toList();
         } else if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {
-            Collections.emptyList(); // متدی که لیست بازیکنان درون قفس را برمی‌گرداند
+            return new ArrayList<>(dynamicCage.getInCagePlayers());
         }
         return Collections.emptyList();
     }
